@@ -28,7 +28,8 @@ const config = {
     channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
     channelSecret: process.env.CHANNEL_SECRET,
 };
-const PORT = process.env.PORT = 4000
+console.log(config)
+const PORT = process.env.PORT || 4000
 
 const client = new line.Client(config);
 
