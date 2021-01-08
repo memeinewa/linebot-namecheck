@@ -28,7 +28,7 @@ const config = {
     channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
     channelSecret: process.env.CHANNEL_SECRET,
 };
-console.log(config)
+
 const PORT = process.env.PORT || 4000
 
 const client = new line.Client(config);
@@ -40,6 +40,7 @@ app.use(cors({ origin: true }))
 
 app.post('/webhook', (req, res) => {
     let events = req.body.events
+    console.log(events)
     reply(events)
     res.sendStatus(200)
 })
@@ -52,7 +53,8 @@ async function reply(events) {
     if (events.length) {
         events = events[0]
         let userId = events.source.userId
-        let _profile = await profile(userId)
+        let groupId = events.source.groupId
+        let _profile = await profile(groupId, userId)
         let displayName = _profile.displayName
         if (events.message.text === 'บอท') {
             client.replyMessage(events.replyToken, {
@@ -143,6 +145,6 @@ async function reply(events) {
     else console.log('no events')
 }
 
-function profile(userId) {
-    return client.getProfile(userId)
+function profile(groupId, userId) {
+    return client.getGroupMemberProfile(groupId, userId)
 }
